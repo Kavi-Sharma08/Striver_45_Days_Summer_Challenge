@@ -83,5 +83,5 @@ int main(){
 
 }
            
-// TC -> O(n*m) + O(N) + O(N) + O(N) + O(N)
+// TC -> O(n*m) + O(m*n) * O(n+m)
 // SC -> O(n+m)
