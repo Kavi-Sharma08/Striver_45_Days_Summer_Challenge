@@ -1,85 +1,117 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
 
-struct ListNode {
+class ListNode{
+public: 
     int val;
-    ListNode *next;
-    ListNode *child;
-    ListNode() {
-        val = 0;
+    ListNode* next;
+    ListNode* child;
+
+    ListNode(){
+        val = 0 ;
         next = NULL;
         child = NULL;
     }
-    ListNode(int data1) {
-        val = data1;
-        next = NULL;
-        child = NULL;
+
+    ListNode (int val){
+        this->val = val;
+        this->child = NULL;
+        this->next = NULL;
     }
-    ListNode(int data1, ListNode *next1, ListNode* next2) {
-        val = data1;
-        next = next1;
-        child = next1;
+
+    ListNode(int val , ListNode* next , ListNode* child){
+        this->val = val;
+        this->next = next;
+        this->child = child;
     }
+
+    
 };
 
 class Solution {
+
 public:
-    ListNode* merge(ListNode* head1 , ListNode* head2){
-        ListNode* newHead = new ListNode(-1);
-        ListNode* dummy = newHead;
-        while(head1!=nullptr && head2!=nullptr){
-            if(head1->val < head2->val){
-                dummy->child = head1;
-                dummy = head1;
-                head1 = head1->child;
+    ListNode* merge(ListNode* list1 , ListNode* list2){
+        ListNode* dummyNode = new ListNode(-1);
+        ListNode* res = dummyNode;
+
+        while(list1 != NULL && list2 != NULL){
+            if(list1->val < list2->val){
+                res->child = list1;
+                list1 = list1->child;
             }
             else{
-                dummy->child = head2;
-                dummy = head2;
-                head2 = head2->child;
+                res->child = list2;
+                list2 = list2->child;
             }
-            dummy->next = nullptr;
+            res = res->child;
         }
-        if(head1){
-            dummy->child = head1;
+        if(list1){
+            res->child = list1;
+            res = res->child;
         }
-        else {
-            dummy->child = head2;
-        }
-        if(newHead->child){
-            newHead->child->next = nullptr;
+        if(list2){
+            res->child = list2;
+            res = res->child;
         }
 
-        return newHead->child;
-
+        return dummyNode->child;
     }
     ListNode* flatten(ListNode* head){
-        if(head==nullptr || head->next == nullptr) return head;
+
+        if(head == NULL) return head;
 
         ListNode* newHead = flatten(head->next);
+        ListNode* newHead2 =  merge(newHead , head);
 
-        head = merge(head , newHead);
-
-        return head;
+        return newHead2;
     }
+    void print(ListNode *head){
 
+        if(head == NULL) return ;
+
+        ListNode* temp = head;
+
+        cout<<temp->val<<endl;
+
+        while(temp->child  != NULL){
+            cout<<temp->child->val<<endl;
+            temp = temp->child;
+        }
+
+        print(head->next);
+    }
+    void print2(ListNode* head){
+        while(head != NULL){
+            cout<<head->val<<" ";
+            head = head->child;
+        }
+    }
 };
 
 int main(){
-    ListNode* head = new ListNode(5);
-    head->child = new ListNode(14);
 
-    head->next = new ListNode(10);
-    head->next->child = new ListNode(4);
+    ListNode* head = new ListNode(4);
+    head->child = new ListNode(10);
+    head->next = new ListNode(2);
+
+    head->next->child = new ListNode(5);
+    head->next->child->child = new ListNode(20);
 
     head->next->next = new ListNode(12);
-    head->next->next->child = new ListNode(20);
-    head->next->next->child->child = new ListNode(13);
 
-    head->next->next->next = new ListNode(7);
-    head->next->next->next->child = new ListNode(17);
+    head->next->next->child = new ListNode(13);
+    head->next->next->child->child = new ListNode(16);
+    head->next->next->child->child->child = new ListNode(17);
 
-    Solution obj; 
+    Solution obj;
 
-    ListNode* flattened = obj.flatten(head);
+    ListNode* newHead = obj.flatten(head);
+
+    obj.print2(newHead);
+
+    
+
+    
+
 }
