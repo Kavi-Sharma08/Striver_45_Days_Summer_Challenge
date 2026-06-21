@@ -2,38 +2,33 @@
 using namespace std;
 class Solution {
 public:
-    void helper(string &s , int ind , vector<string> &ans){
-        if(ind >= s.size()){
-            ans.push_back(s);
+    void helper(vector<int> &nums , vector<vector<int>> &ans ,int ind){
+        if(ind >= nums.size()){
+            ans.push_back(nums);
             return;
         }
-        for(int i = ind ; i  < s.size() ; i++){
-            swap(s[ind] , s[i]);
-            helper(s , ind + 1 , ans);
-            swap(s[ind] , s[i]);
+        for(int i = ind ; i < nums.size() ; i++){
+            swap(nums[ind] , nums[i]);
+            helper(nums , ans , ind +1);
+            swap(nums[ind] , nums[i]);
         }
     }
-    string getPermutation(int n ,int k) {
-        if(n==1) return "1";
-        string s = "";
-        for(int i = 1 ; i <=n ; i++){
-            s = s + char(i + '0');
-        }
-        vector<string> ans;
-        helper(s , 0 , ans);
-        sort(ans.begin() , ans.end());
-        return ans[k-1];
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> ans;
+        helper(nums , ans , 0);
+        return ans;
     }
 };
-
 int main(){
-
-   int n = 3;
-   int k = 1;
-   Solution obj;
-   string s = obj.getPermutation(n , k); 
-   cout<<s;
-   
-
+    vector<int> nums = {1,2,3};
+    Solution obj;
+    vector<vector<int>> ans = obj.permute(nums);
+    for(vector<int> i : ans){
+        for(int j : i){
+            cout<<j<<" ";
+        }
+        cout<<endl;
+    }
+    
 
 }
